@@ -15,52 +15,42 @@ class UserController extends Controller
 {
     public function createUser(Request $request)
     {
-        $userAgent = $request->header('User-Agent');
-
-        // Use a library like jenssegers/agent to parse the User-Agent string
-        $agent = new \Jenssegers\Agent\Agent();
-
-        // Detect the platform using the parsed User-Agent string
-        $platform = $agent->platform();
-
         $rules = [
             'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'password' => 'required|min:6',
             'first_name' => 'required',
             'last_name' => 'required',
             'phone' => 'required',
         ];
-        $data = request()->all();
-        $valid = Validator::make($data, $rules);
-        if (count($valid->errors())){
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
             return response([
                 'status' => 'failed',
-                'error' => $valid->errors()
+                'errors' => $validator->errors()
             ]);
         }
+
+        // Create user
         $user = new User();
-        $user->email = $data['email'];
-        $user->last_name = $data['last_name'];
-        $user->first_name = $data['first_name'];
-        $user->phone = $data['phone'];
-        $user->email = $data['email'];
+        $user->email = $request->email;
+        $user->last_name = $request->last_name;
+        $user->first_name = $request->first_name;
+        $user->phone = $request->phone;
         $user->password = Hash::make($request->password);
         $user->save();
-//        storelog('Created a new user in', $user,$platform);
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data ['password']])) {
-            $user = Auth::user();
 
-            // Create a token for the user
-            $token = $user->createToken('token')->plainTextToken;
+        // Create and return token
+        $token = $user->createToken('token')->plainTextToken;
 
-            // Return the response
-            return response([
-                'status' => 'success',
-                'token' => $token,
-                'user' => $user
-            ]);
-        }
+        return response([
+            'status' => 'success',
+            'token' => $token,
+            'user' => $user
+        ]);
     }
+
 //    public function UpdateProfile(Request $request)
 //    {
 //        $user_id=Auth::user()->id;

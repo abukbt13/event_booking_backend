@@ -59,5 +59,12 @@ class EventController extends Controller
         ]);
     }
 
+    public function showEvents(){
+        $events = Event::where('user_id', Auth::id())->get();
+        return response()->json([
+            'status' => 'success',
+            'events' => $events
+        ]);
 
+    }
 }

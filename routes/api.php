@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\VenueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-auth', [UserController::class, 'auth']);
     route::post('event', [EventController::class, 'createEvent']);
     route::get('event', [EventController::class, 'showEvents']);
+
+//    create venue by admin
+    route::post('venue', [VenueController::class, 'createVenue']);
+    route::get('venue', [VenueController::class, 'showVenues']);
 });
