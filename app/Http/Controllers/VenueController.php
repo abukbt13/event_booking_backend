@@ -54,7 +54,7 @@ class VenueController extends Controller
                 'events' => $venue
             ]);}
     public function showVenues(){
-        $venues = Venue::where('user_id', Auth::id())->get();
+        $venues = Venue::all();
         return response([
             'status' => 'success',
             'venues' => $venues

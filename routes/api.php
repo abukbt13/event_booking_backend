@@ -17,6 +17,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-auth', [UserController::class, 'auth']);
     route::post('event', [EventController::class, 'createEvent']);
     route::get('event', [EventController::class, 'showEvents']);
+    route::get('event/delete/{id}', [EventController::class, 'deleteEvent']);
 
 //    create venue by admin
     route::post('venue', [VenueController::class, 'createVenue']);
