@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VenueController;
@@ -18,6 +19,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     route::post('event', [EventController::class, 'createEvent']);
     route::get('event', [EventController::class, 'showEvents']);
     route::get('event/delete/{id}', [EventController::class, 'deleteEvent']);
+    route::post('event/update/{id}', [EventController::class, 'UpdateEvent']);
+
+//    booking by client
+    route::post('book', [BookingController::class, 'BookVenue']);
 
 //    create venue by admin
     route::post('venue', [VenueController::class, 'createVenue']);

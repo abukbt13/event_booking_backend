@@ -91,5 +91,33 @@ class EventController extends Controller
             'message' => 'Event not found or unauthorized.',
         ], 404);
     }
+    public function UpdateEvent(Request $request,$id)
+    {
+        $data = $request->all();
+        // Find the event by user_id and id
+        $event = Event::where('user_id', Auth::id())->where('id', $id)->first();
+
+        // Check if the event exists
+        if ($event) {
+            // Delete the event
+            $event->title = $data['title'];
+            $event->description = $data['description'];
+            $event->event_date = $data['event_date'];
+            $event->capacity = $data['capacity'];
+            $event->Update();
+
+            // Return success response
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Event updated successfully.',
+            ]);
+        }
+
+        // Return error response if event not found
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Event not found or unauthorized.',
+        ], 404);
+    }
 
 }
