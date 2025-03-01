@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,47 @@ class EventController extends Controller
             'status' => 'success',
             'message' => 'Event created successfully!',
             'event' => $event
+        ]);
+    }
+    public function BookVenue(Request $request,$id)
+    {
+        $data = $request->all();
+
+        // Validation rules
+        $validator = Validator::make($data, [
+           'start_time' => 'required',
+            'event_date' => 'required',
+            'end_time' => 'required',
+            'capacity' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Enter correct data',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+
+        // Save the new event
+        $booking = new Booking();
+        $booking->user_id = Auth::id();
+        $booking->venue = $data['venue'];
+        $booking->venue_id = $data['venue_id'];
+        $booking->event_id = $id;
+        $booking->start_time = $data['start_time'];
+        $booking->end_time = $data['end_time'];
+        $booking->date = $data['event_date'];
+        $booking->price_per_hour = $data['price_per_hour'];
+        $booking->total_price = $data['total_price'];
+        $booking->capacity = $data['capacity'];
+        $booking->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Booking created successfully!',
+            'Booking' => $booking
         ]);
     }
 

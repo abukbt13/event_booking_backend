@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('venue');
             $table->date('date');
-            $table->time('time_start');
-            $table->time('time_end');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->integer('price_per_hour')->nullable();
+            $table->integer('total_price')->nullable();
+            $table->integer('capacity');
             $table->string('status')->default('pending');
-            $table->foreignId('event_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->integer('venue_id');
+            $table->integer('event_id');
+            $table->integer('user_id');
+
             $table->timestamps();
         });
     }

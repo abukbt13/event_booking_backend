@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('event', [EventController::class, 'showEvents']);
     route::get('event/delete/{id}', [EventController::class, 'deleteEvent']);
     route::post('event/update/{id}', [EventController::class, 'UpdateEvent']);
+    route::post('event/bookings/{id}', [EventController::class, 'BookVenue']);
 
 //    booking by client
     route::post('book', [BookingController::class, 'BookVenue']);
