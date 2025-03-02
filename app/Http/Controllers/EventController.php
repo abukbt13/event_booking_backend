@@ -62,10 +62,9 @@ class EventController extends Controller
     public function BookVenue(Request $request,$id)
     {
         $data = $request->all();
-
         // Validation rules
         $validator = Validator::make($data, [
-           'start_time' => 'required',
+            'start_time' => 'required',
             'event_date' => 'required',
             'end_time' => 'required',
             'capacity' => 'required|integer',
@@ -93,12 +92,18 @@ class EventController extends Controller
         $booking->total_price = $data['total_price'];
         $booking->capacity = $data['capacity'];
         $booking->save();
+        if ($booking) {
+            $event = Event::findOrFail($id);
+            $event->booked = '1';
+            $event->update();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Booking created successfully!',
-            'Booking' => $booking
-        ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Booking created successfully!',
+            ]);
+        }
+
     }
 
     public function showEvents(){

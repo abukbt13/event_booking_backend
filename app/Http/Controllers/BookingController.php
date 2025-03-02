@@ -38,4 +38,12 @@ class BookingController extends Controller
             'booking' => $booking
         ]);
     }
+    public function ShowBookings()
+    {
+        $bookings = Booking::where('user_id', Auth::id())->get();
+        return response([
+            'status' => 'success',
+            'bookings' => $bookings
+        ]);
+    }
 }

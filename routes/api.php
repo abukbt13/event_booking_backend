@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //    booking by client
     route::post('book', [BookingController::class, 'BookVenue']);
+    route::get('book', [BookingController::class, 'ShowBookings']);
 
 //    create venue by admin
     route::post('venue', [VenueController::class, 'createVenue']);
