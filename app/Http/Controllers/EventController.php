@@ -101,6 +101,7 @@ class EventController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Booking created successfully!',
+                'booking' =>$booking,
             ]);
         }
 

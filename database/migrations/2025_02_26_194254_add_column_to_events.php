@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->integer('booked')->default(0); // Replace 'new_column' with your actual column name
-            $table->string('status')->default('pending'); // Replace 'new_column' with your actual column name
+            $table->string('status')->default('active'); // Replace 'new_column' with your actual column name
         });
     }
 
