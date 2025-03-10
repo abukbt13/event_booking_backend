@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VenueController;
 use Illuminate\Http\Request;
@@ -14,6 +15,9 @@ Route::get('/user', function (Request $request) {
 Route::post('auth/register', [UserController::class, 'createUser']);
 Route::post('auth/login', [UserController::class, 'login']);
 //Route::get('test', [UserController::class, 'Notify']);
+
+Route::post('capture_payment/{job_seeker_id}/{employer_id}',[PaymentController::class, 'capture']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-auth', [UserController::class, 'auth']);
     route::post('event', [EventController::class, 'createEvent']);

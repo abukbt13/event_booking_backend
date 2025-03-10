@@ -33,7 +33,8 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "app/helpers/log.php"
+            "app/helpers/log.php",
+            "app/helpers/Notification.php"
         ]
     },
     "scripts": {

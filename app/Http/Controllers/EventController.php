@@ -31,18 +31,18 @@ class EventController extends Controller
         }
 
         // Check if event already exists
-        $existingEvent = Event::where('title', $data['title'])
-            ->where('description', $data['description'])
-            ->where('event_date', $data['event_date'])
-            ->where('user_id', Auth::id()) // Ensure it's checked per user
-            ->first();
-
-        if ($existingEvent) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'This event already exists!'
-            ]);
-        }
+//        $existingEvent = Event::where('title', $data['title'])
+//            ->where('description', $data['description'])
+//            ->where('event_date', $data['event_date'])
+//            ->where('user_id', Auth::id()) // Ensure it's checked per user
+//            ->first();
+//
+//        if ($existingEvent) {
+//            return response()->json([
+//                'status' => 'failed',
+//                'message' => 'This event already exists!'
+//            ]);
+//        }
 
         // Save the new event
         $event = new Event();
@@ -53,6 +53,8 @@ class EventController extends Controller
         $event->capacity = $data['capacity'];
         $event->save();
 
+        $body = "Thank you for creating your event $event->title which you have scheduled to be on ".$event->title." I am reminding you to keep the date and time. " . $event->event_date ." ";
+        sendNotification("+254" . Auth::user()->phone, $body);
         return response()->json([
             'status' => 'success',
             'message' => 'Event created successfully!',
