@@ -14,8 +14,10 @@ class PaymentController extends Controller
      * Display a listing of the resource.
      */
 
-    function capture(Request $request,$book_id,$user_id){
+    function CapturePayment(Request $request){
+
         Log::info('Url found almost finishing');
+
         // Get the JSON data from the request using file_get_contents
         $json_data = file_get_contents('php://input');
 
