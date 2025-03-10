@@ -53,7 +53,7 @@ class EventController extends Controller
         $event->capacity = $data['capacity'];
         $event->save();
 
-        $body = "Thank you for creating your event $event->title which you have scheduled to be on ".$event->title." I am reminding you to keep the date and time. " . $event->event_date ." ";
+        $body = "Thank you for creating your event <b>$event->title </b> which is scheduled to be on ".$event->event_date." I am reminding you to keep the date and time.";
         sendNotification("+254" . Auth::user()->phone, $body);
         return response()->json([
             'status' => 'success',
