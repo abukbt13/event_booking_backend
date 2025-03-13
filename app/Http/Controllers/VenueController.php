@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +59,13 @@ class VenueController extends Controller
         return response([
             'status' => 'success',
             'venues' => $venues
+        ]);
+    }
+    public function showBookings(){
+        $bookings = Booking::all();
+        return response([
+            'status' => 'success',
+            'bookings' => $bookings
         ]);
     }
 
