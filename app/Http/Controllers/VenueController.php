@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class VenueController extends Controller
@@ -13,16 +14,15 @@ class VenueController extends Controller
     public function createVenue(Request $request)
     {
         $data = $request->all();
-
         // Validation rules
         $validator = Validator::make($data, [
-            'venue' => 'unique:venues|required',
+            'venue' => 'required|unique:venues',
             'location' => 'required',
-            'capacity' => 'required',
+            'capacity' => 'required|integer',
             'description' => 'required',
             'amenities' => 'required',
-            'price_per_hour' => 'required',
-            'contact_email' => 'required',
+            'price_per_hour' => 'required|numeric',
+            'contact_email' => 'required|email',
             'contact_phone' => 'required',
         ]);
 
@@ -31,29 +31,38 @@ class VenueController extends Controller
                 'status' => 'failed',
                 'message' => 'Enter correct data',
                 'errors' => $validator->errors()
-            ]);
+            ], 422);
         }
 
-        // Check if event already exists
+        // Create venue
+        $venue = new Venue();
+        $venue->user_id = Auth::id();
+        $venue->venue = $data['venue'];
+        $venue->location = $data['location'];
+        $venue->capacity = $data['capacity'];
+        $venue->description = $data['description'];
+        $venue->amenities = $data['amenities'];
+        $venue->price_per_hour = $data['price_per_hour'];
+        $venue->contact_email = $data['contact_email'];
+        $venue->contact_phone = $data['contact_phone'];
 
+        // Handle image upload
+        if ($request->hasFile('picture')) {
+            $file = $request->file('picture');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('Events', $filename, 'public'); // Correct way to store the file
 
-            $venue = new Venue();
-            $venue->user_id = Auth::id();
-            $venue->venue = $data['venue'];
-            $venue->location = $data['location'];
-            $venue->capacity = $data['capacity'];
-            $venue->description = $data['description'];
-            $venue->amenities = $data['amenities'];
-            $venue->price_per_hour = $data['price_per_hour'];
-            $venue->contact_email = $data['contact_email'];
-            $venue->contact_phone = $data['contact_phone'];
-            $venue->save();
+            $venue->picture = $path; // Save the path to the database
+        }
 
-            return response([
-                'status' => 'success',
-                'message' => 'Venue  created successfully!',
-                'events' => $venue
-            ]);}
+        $venue->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Venue created successfully!',
+            'venue' => $venue
+        ]);
+    }
     public function showVenues(){
         $venues = Venue::all();
         return response([
