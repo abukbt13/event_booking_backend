@@ -16,6 +16,7 @@ class PaymentController extends Controller
 
     function CapturePayment(Request $request){
 
+
         Log::info('Url found almost finishing');
 
         // Get the JSON data from the request using file_get_contents

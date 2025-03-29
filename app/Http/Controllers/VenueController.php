@@ -122,6 +122,13 @@ class VenueController extends Controller
             'venues' => $venues
         ]);
     }
+    public function showVenue($id){
+        $venues = Venue::findOrFail($id);
+        return response([
+            'status' => 'success',
+            'venue' => $venues
+        ]);
+    }
     public function showBookings(){
         $bookings = Booking::all();
         return response([

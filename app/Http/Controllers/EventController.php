@@ -84,7 +84,7 @@ class EventController extends Controller
         // Save the new event
         $booking = new Booking();
         $booking->user_id = Auth::id();
-        $booking->venue = $data['venue'];
+        $booking->venue = $data['venue_id'];
         $booking->venue_id = $data['venue_id'];
         $booking->event_id = $id;
         $booking->start_time = $data['start_time'];

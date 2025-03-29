@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     route::post('admin/venue', [VenueController::class, 'createVenue']);
     route::post('admin/venue/{id}', [VenueController::class, 'EditVenue']);
     route::get('show/venues', [VenueController::class, 'showVenues']);
+    route::get('show/venues/{id}', [VenueController::class, 'showVenue']);
 
     route::get('admin/show/bookings', [VenueController::class, 'showBookings']);
 });
