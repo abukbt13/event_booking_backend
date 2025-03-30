@@ -16,7 +16,7 @@ Route::post('auth/register', [UserController::class, 'createUser']);
 Route::post('auth/login', [UserController::class, 'login']);
 //Route::get('test', [UserController::class, 'Notify']);
 
-Route::post('payment',[PaymentController::class, 'CapturePayment']);
+Route::post('payment/{booking_id}/{user_id}',[PaymentController::class, 'CapturePayment']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-auth', [UserController::class, 'auth']);
