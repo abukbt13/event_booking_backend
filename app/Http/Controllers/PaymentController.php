@@ -21,7 +21,7 @@ class PaymentController extends Controller
 
         // Get the JSON data from the request using file_get_contents
         $json_data = file_get_contents('php://input');
-
+        Log::info($json_data);
         // Decode the JSON data
         $data = json_decode($json_data, true);
 
