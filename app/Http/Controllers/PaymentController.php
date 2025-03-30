@@ -14,7 +14,7 @@ class PaymentController extends Controller
      * Display a listing of the resource.
      */
 
-    function CapturePayment(Request $request){
+    function CapturePayment(Request $request,$booking_id,$user_id){
 
 
         Log::info('Url found almost finishing');

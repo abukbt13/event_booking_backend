@@ -50,7 +50,7 @@ class BookingController extends Controller
     public function ShowSingleBooking($id)
     {
         $booking = Booking::where('user_id', Auth::id())
-            ->where('id', $id)
+            ->where('event_id', $id)
             ->first(); // Use first() if expecting a single record
 
         if (!$booking) {
