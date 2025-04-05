@@ -52,7 +52,7 @@ class BookingController extends Controller
         $booking = Booking::where('user_id', Auth::id())
             ->where('event_id', $id)
             ->first(); // Use first() if expecting a single record
-
+//        dd($booking);
         if (!$booking) {
             return response()->json([
                 'status' => 'error',
