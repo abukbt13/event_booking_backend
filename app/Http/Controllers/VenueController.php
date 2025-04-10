@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -130,7 +131,15 @@ class VenueController extends Controller
         ]);
     }
     public function showBookings(){
-        $bookings = Booking::all();
+
+        $bookings = DB::table('bookings')
+            ->join('venues', 'bookings.venue_id', '=', 'venues.id')
+            ->select(
+                'bookings.*',
+                'venues.venue as venue_name' // only fetch venue name
+            )
+            ->get();
+
         return response([
             'status' => 'success',
             'bookings' => $bookings

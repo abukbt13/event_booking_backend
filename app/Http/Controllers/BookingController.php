@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Event;
 use App\Repositories\MpesaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,28 @@ class BookingController extends Controller
         return response([
             'status' => 'success',
             'bookings' => $bookings
+        ]);
+    }
+    public function ShowSingleEvent($event_id)
+    {
+        $event= Event::where('events.user_id', Auth::id())
+            ->where('events.id', $event_id)
+            ->join('bookings', 'bookings.event_id', '=', 'bookings.id')
+            ->join('venues', 'venues.id', '=', 'bookings.venue_id')
+            ->select('events.*','bookings.status','bookings.start_time','bookings.end_time','bookings.total_price','bookings.date','bookings.price_per_hour','bookings.id as booking_id', 'events.id', 'venues.venue')
+            ->first();
+
+//        dd($booking);
+        if (!$event) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Booking not found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'events' => $event
         ]);
     }
     public function ShowSingleBooking($event_id)
