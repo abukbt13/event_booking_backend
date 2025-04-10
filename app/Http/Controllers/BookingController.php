@@ -94,10 +94,10 @@ class BookingController extends Controller
     public function CompleteCheckout(Request $request,$id)
     {
 //        dd($request->all());
-//        $amount =$request->total_price;
-//        $user = Auth::user();
-//        $mpesa = new MpesaRepository();
-//        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
+        $amount =$request->total_price;
+        $user = Auth::user();
+        $mpesa = new MpesaRepository();
+        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
         $data = $request->all();
 
         // Find the event by user_id and id
