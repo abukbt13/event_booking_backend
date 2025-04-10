@@ -47,17 +47,20 @@ class BookingController extends Controller
             'bookings' => $bookings
         ]);
     }
-    public function ShowSingleBooking($id)
+    public function ShowSingleBooking($event_id)
     {
-        $booking = Booking::where('user_id', Auth::id())
-            ->where('event_id', $id)
-            ->first(); // Use first() if expecting a single record
+        $booking = Booking::where('bookings.user_id', Auth::id())
+            ->where('bookings.id', $event_id)
+            ->join('venues', 'bookings.venue_id', '=', 'venues.id')
+            ->select('bookings.*', 'venues.venue')
+            ->first();
+
 //        dd($booking);
         if (!$booking) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Booking not found'
-            ], 404);
+            ]);
         }
 
         return response()->json([
@@ -67,38 +70,38 @@ class BookingController extends Controller
     }
     public function CompleteCheckout(Request $request,$id)
     {
-        $user = Auth::user();
-        $mpesa = new MpesaRepository();
-        $mpesa->C2BMpesaApi($user->id,$id,$user->phone);
+//        dd($request->all());
+//        $amount =$request->total_price;
+//        $user = Auth::user();
+//        $mpesa = new MpesaRepository();
+//        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
         $data = $request->all();
 
         // Find the event by user_id and id
-
+//        dd($id);
 //        code for updating payment if success
-//        $book = Booking::where('user_id', Auth::id())->where('id', $id)->first();
-//
-//        // Check if the event exists
-//        if ($book) {
-//            $book->venue = $data['venue'];
-//            $book->start_time = $data['start_time'];
-//            $book->end_time = $data['end_time'];
-//            $book->total_price = $data['total_price'];
-//            $book->date = $data['date'];
-//            $book->status = 'booked';
-//            $book->Update();
-//
-//            // Return success response
-//            return response()->json([
-//                'status' => 'success',
-//                'message' => 'Booked updated successfully.',
-//            ]);
-//        }
+        $book = Booking::findOrFail($id);
+        // Check if the event exists
+        if ($book) {
+            $book->start_time = $data['start_time'];
+            $book->end_time = $data['end_time'];
+            $book->total_price = $data['total_price'];
+            $book->date = $data['date'];
+            $book->payment_status = 1;
+            $book->Update();
 
-        // Return error response if event not found
-//        return response()->json([
-//            'status' => 'error',
-//            'message' => 'Event not found or unauthorized.',
-//        ], 404);
+            // Return success response
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Booked updated successfully.',
+            ]);
+        }
+
+//         Return error response if event not found
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Event not found or unauthorized.',
+        ], 404);
     }
 
 }

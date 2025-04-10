@@ -82,7 +82,6 @@ class EventController extends Controller
         // Save the new event
         $booking = new Booking();
         $booking->user_id = Auth::id();
-        $booking->venue = $data['venue_id'];
         $booking->venue_id = $data['venue_id'];
         $booking->event_id = $id;
         $booking->start_time = $data['start_time'];
@@ -96,7 +95,6 @@ class EventController extends Controller
             $event = Event::findOrFail($id);
             $event->booked = '1';
             $event->update();
-
 
             return response()->json([
                 'status' => 'success',
@@ -130,6 +128,34 @@ class EventController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Event deleted successfully.',
+            ]);
+        }
+
+        // Return error response if event not found
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Event not found or unauthorized.',
+        ], 404);
+    }
+    public function DeleteBooking($id)
+    {
+//        dd(Auth::user());
+        // Find the event by user_id and id
+        $book = Booking::where('user_id', Auth::id())->where('status','pending')->where('id', $id)->first();
+//            dd($book);
+        // Check if the event exists
+        if ($book) {
+            // Delete the event
+            $book->delete();
+            $event =Event::where('user_id', Auth::id())->where('id', $book->event_id)->first();
+            $event->booked = 0;
+            if ($event) {
+                $event->update();
+            }
+            // Return success response
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Booking deleted successfully.',
             ]);
         }
 

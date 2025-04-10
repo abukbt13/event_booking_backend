@@ -16,7 +16,7 @@ Route::post('auth/register', [UserController::class, 'createUser']);
 Route::post('auth/login', [UserController::class, 'login']);
 //Route::get('test', [UserController::class, 'Notify']);
 
-Route::post('payment/{booking_id}/{user_id}',[PaymentController::class, 'CapturePayment']);
+Route::post('payment/{booking_id}',[PaymentController::class, 'CapturePayment']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-auth', [UserController::class, 'auth']);
@@ -25,11 +25,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('event/delete/{id}', [EventController::class, 'deleteEvent']);
     route::post('event/update/{id}', [EventController::class, 'UpdateEvent']);
     route::post('event/bookings/{id}', [EventController::class, 'BookVenue']);
+    route::get('booking/delete/{id}', [EventController::class, 'DeleteBooking']);
 
 //    booking by client
     route::post('book', [BookingController::class, 'BookVenue']);
     route::get('book', [BookingController::class, 'ShowBookings']);
-    route::get('book/{id}', [BookingController::class, 'ShowSingleBooking']);
+    route::get('book/{event_id}', [BookingController::class, 'ShowSingleBooking']);
     route::post('checkout/{id}', [BookingController::class, 'CompleteCheckout']);
 
 //    create venue by admin

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class MpesaRepository
 {
-    public function C2BMpesaApi($user_id,$booking_id,$phone){
+    public function C2BMpesaApi($booking_id,$phone,$amount){
 
         Log::info('Request Initiated');
 
@@ -20,11 +20,11 @@ class MpesaRepository
             'Password' => $password,
             'Timestamp' => $timestamp,
             'TransactionType' => 'CustomerPayBillOnline',
-            'Amount' => round(1,0),
+            'Amount' => round($amount,0),
             'PartyA' => $this->formatPhone($phone),
             'PartyB' => env('C2B_SHORTCODE'),
             'PhoneNumber' => $this->formatPhone($phone),
-            'CallBackURL' => url('https://event.kwetunyumbani.store/api/payment/'.$booking_id.'/'. $user_id ),
+            'CallBackURL' => url('https://event.kwetunyumbani.store/api/payment/'.$booking_id ),
             'AccountReference' =>$phone.'T',
             'TransactionDesc' => 'Payment for connection'
         );
