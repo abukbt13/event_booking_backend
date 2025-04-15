@@ -50,12 +50,15 @@ class BookingController extends Controller
     }
     public function ShowSingleEvent($event_id)
     {
-        $event= Event::where('events.user_id', Auth::id())
-            ->where('events.id', $event_id)
-            ->join('bookings', 'bookings.event_id', '=', 'bookings.id')
-            ->join('venues', 'venues.id', '=', 'bookings.venue_id')
-            ->select('events.*','bookings.status','bookings.start_time','bookings.end_time','bookings.total_price','bookings.date','bookings.price_per_hour','bookings.id as booking_id', 'events.id', 'venues.venue')
-            ->first();
+        $event= Booking::where('user_id', Auth::id())
+                ->where('event_id', $event_id)
+                ->where('status', 'pending')
+                ->get();
+//            ->where('events.id', $event_id)
+//            ->join('bookings', 'bookings.event_id', '=', 'bookings.id')
+//            ->join('venues', 'venues.id', '=', 'bookings.venue_id')
+//            ->select('events.*','bookings.status','bookings.start_time','bookings.end_time','bookings.total_price','bookings.date','bookings.price_per_hour','bookings.id as booking_id', 'events.id', 'venues.venue')
+//            ->first();
 
 //        dd($booking);
         if (!$event) {
@@ -73,9 +76,32 @@ class BookingController extends Controller
     public function ShowSingleBooking($event_id)
     {
         $booking = Booking::where('bookings.user_id', Auth::id())
-            ->where('bookings.id', $event_id)
+            ->where('bookings.event_id', $event_id)
+            ->where('bookings.status', 'pending')
             ->join('venues', 'bookings.venue_id', '=', 'venues.id')
-            ->select('bookings.*', 'venues.venue')
+            ->select('bookings.*', 'venues.venue','venues.picture')
+            ->first();
+
+//        dd($booking);
+        if (!$booking) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Booking not found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'booking' => $booking
+        ]);
+    }
+    public function ShowBookingDetails($booking_id)
+    {
+        $booking = Booking::where('bookings.user_id', Auth::id())
+            ->where('bookings.id', $booking_id)
+            ->where('bookings.status', 'pending')
+            ->join('venues', 'bookings.venue_id', '=', 'venues.id')
+            ->select('bookings.*', 'venues.venue','venues.picture')
             ->first();
 
 //        dd($booking);
@@ -94,10 +120,10 @@ class BookingController extends Controller
     public function CompleteCheckout(Request $request,$id)
     {
 //        dd($request->all());
-        $amount =$request->total_price;
-        $user = Auth::user();
-        $mpesa = new MpesaRepository();
-        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
+//        $amount =$request->total_price;
+//        $user = Auth::user();
+//        $mpesa = new MpesaRepository();
+//        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
         $data = $request->all();
 
         // Find the event by user_id and id
