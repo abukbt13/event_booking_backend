@@ -42,7 +42,12 @@ class BookingController extends Controller
     }
     public function ShowBookings()
     {
-        $bookings = Booking::where('user_id', Auth::id())->get();
+        $bookings = Booking::where('bookings.user_id', Auth::id())
+            ->join('events', 'events.id', '=', 'bookings.event_id')
+            ->join('venues', 'venues.id', '=', 'bookings.venue_id')
+            ->select('bookings.*', 'events.title','events.description', 'venues.venue')
+            ->get();
+
         return response([
             'status' => 'success',
             'bookings' => $bookings
@@ -120,10 +125,10 @@ class BookingController extends Controller
     public function CompleteCheckout(Request $request,$id)
     {
 //        dd($request->all());
-//        $amount =$request->total_price;
-//        $user = Auth::user();
-//        $mpesa = new MpesaRepository();
-//        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
+        $amount =$request->total_price;
+        $user = Auth::user();
+        $mpesa = new MpesaRepository();
+        $mpesa->C2BMpesaApi($id,$user->phone,$amount);
         $data = $request->all();
 
         // Find the event by user_id and id

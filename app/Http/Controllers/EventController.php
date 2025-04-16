@@ -91,6 +91,14 @@ class EventController extends Controller
         $booking->total_price = $data['total_price'];
         $booking->capacity = $data['capacity'];
         $booking->save();
+
+        $body = "Your booking was made successfully. Please remember the date and time: " .
+            $booking->date . ", from " . $booking->start_time . " to " . $booking->end_time . ".";
+
+        sendNotification("+254" . Auth::user()->phone, $body);
+
+
+
         if ($booking) {
             $event = Event::findOrFail($id);
             $event->booked = '1';

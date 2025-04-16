@@ -134,8 +134,10 @@ class VenueController extends Controller
 
         $bookings = DB::table('bookings')
             ->join('venues', 'bookings.venue_id', '=', 'venues.id')
+            ->join('users', 'bookings.user_id', '=', 'users.id')
             ->select(
                 'bookings.*',
+                'users.first_name','users.last_name','users.phone',
                 'venues.venue as venue_name' // only fetch venue name
             )
             ->get();
