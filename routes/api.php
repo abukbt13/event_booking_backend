@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VenueController;
 use Illuminate\Http\Request;
@@ -41,4 +42,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('show/venues/{id}', [VenueController::class, 'showVenue']);
 
     route::get('admin/show/bookings', [VenueController::class, 'showBookings']);
+
+    route::post('reviews', [ReviewController::class, 'createReview']);
+    route::get('my/reviews', [ReviewController::class, 'showMyreviews']);
+
+    route::get('client/reviews', [VenueController::class, 'showClientReviews']);
 });
