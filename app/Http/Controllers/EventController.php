@@ -80,6 +80,25 @@ class EventController extends Controller
 
 
         // Save the new event
+        $conflict = Booking::where('date', $data['event_date'])
+            ->where('venue_id', $data['venue_id'])
+            ->where(function ($query) use ($data) {
+                $query->where('start_time', '<', $data['end_time'])
+                    ->where('end_time', '>', $data['start_time']);
+            })
+            ->first(); // get the first conflicting booking
+
+        if ($conflict) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This venue is already booked on this day from ' . $conflict->start_time . ' to ' . $conflict->end_time
+            ]);
+        }
+
+        // Else, go ahead and save the booking
+
+
+
         $booking = new Booking();
         $booking->user_id = Auth::id();
         $booking->venue_id = $data['venue_id'];
