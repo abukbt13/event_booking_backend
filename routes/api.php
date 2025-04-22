@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VenueController;
@@ -15,9 +16,14 @@ Route::get('/user', function (Request $request) {
 
 Route::post('auth/register', [UserController::class, 'createUser']);
 Route::post('auth/login', [UserController::class, 'login']);
-//Route::get('test', [UserController::class, 'Notify']);
+
+
+Route::post('auth/confirmOtp',[UserController::class, 'confirmOtp']);
+Route::post('auth/forget_password',[UserController::class,'forget_pass']);
+Route::post('auth/finish_reset/{email_value}/{otp_value}',[UserController::class,'finish_reset']);
 
 Route::post('payment/{booking_id}',[PaymentController::class, 'CapturePayment']);
+route::get('reviews', [ReviewController::class, 'ShowAlleviews']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user-auth', [UserController::class, 'auth']);
@@ -47,4 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     route::get('my/reviews', [ReviewController::class, 'showMyreviews']);
 
     route::get('client/reviews', [VenueController::class, 'showClientReviews']);
+
+    route::get('reports', [ReportsController::class, 'Reports']);
+    route::get('admin/users', [ReportsController::class, 'usersReports']);
 });

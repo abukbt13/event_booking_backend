@@ -35,5 +35,16 @@ class ReviewController extends Controller
             'reviews' => $reviews
         ]);
     }
+    public function ShowAlleviews()
+    {
+        $reviews = Review::join('users', 'users.id', '=', 'reviews.user_id')
+            ->select('reviews.*', 'users.first_name','users.last_name') // add any user fields you want
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'reviews' => $reviews
+        ]);
+    }
 
 }

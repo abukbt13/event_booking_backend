@@ -121,117 +121,111 @@ class UserController extends Controller
             return response()->json(['authenticated' => false]);
         }
     }
-//    public function show_all_users(){
-//        $users =User::all();
-//        return response([
-//            'status'=>'success',
-//            'users'=>$users
-//        ]);
-//    }
-//    public function forget_pass(){
-//        $rules = [
-//            'email' => 'required',
-//        ];
-//        $data = request()->all();
-//        $valid = Validator::make($data, $rules);
-//        if (count($valid->errors())){
-//            return response([
-//                'status' => 'failed',
-//                'error' => $valid->errors()
-//            ]);
-//        }
-//        $email=$data['email'];
-//        $user = User::where('email',$email)->first();
-//        if ($user) {
-//            $otp = rand(999, 10000);
-//            $user->otp = $otp;
-//            if ($user->update()) {
-//                $otp = rand(999, 10000);
-//                $user->otp = $otp;
-//
-//
-//                $body = "We have received a password reset request. Use the Otp " . $otp . " to reset your password.";
+    public function show_all_users(){
+        $users =User::all();
+        return response([
+            'status'=>'success',
+            'users'=>$users
+        ]);
+    }
+    public function forget_pass(){
+        $rules = [
+            'email' => 'required',
+        ];
+        $data = request()->all();
+        $valid = Validator::make($data, $rules);
+        if (count($valid->errors())){
+            return response([
+                'status' => 'failed',
+                'error' => $valid->errors()
+            ]);
+        }
+        $email=$data['email'];
+        $user = User::where('email',$email)->first();
+        if ($user) {
+            $otp = rand(999, 10000);
+            $user->otp = $otp;
+            if ($user->update()) {
+                $otp = rand(999, 10000);
+                $user->otp = $otp;
+
+
+                $body = "We have received a password reset request. Use the Otp " . $otp . " to reset your password.";
 //                $details = [
 //                    'subject' => 'Password Reset Request',
 //                    'body' => $body,
 //                    'date' => Carbon::now()->format('d-m-Y')
 //                ];
-//                try {
-//                    Mail::to($email)->send(new Notification($details));
-//                    $user->update();
-//                    return response([
-//                        'status' => 'success',
-//                        'message' => 'Check your email for password reset request'
-//                    ]);
-//                } catch (\Exception $exception) {
-//                    // Handle the exception (log it, notify admin, etc.)
-////                    \Log::error('Email sending failed: ' . $exception->getMessage());
-//                    return response([
-//                        'status' => 'failed',
-//                        'message' => 'try again if the issue persist contact the admin'
-//                    ]);
-//                }
-//
-//            }
-//        }
-//        return response([
-//            'status'=>'User not found',
-//            'message' => 'User with the credentials not found'
-//        ]);
-//    }
-//    public function confirmOtp(){
-//        $rules = [
-//            'email' => 'required',
-//            'otp' => 'required',
-//        ];
-//        $data = request()->all();
-//        $valid = Validator::make($data, $rules);
-//        if (count($valid->errors())){
-//            return response([
-//                'status' => 'failed',
-//                'error' => $valid->errors(),
-//                'message' => $valid->errors()
-//            ]);
-//        }
-//        $email=$data['email'];
-//        $otp=$data['otp'];
-//
-//        $user = User::where('email',$email)->where('otp',$otp)->first();
-//        if ($user){
-//            return response([
-//                'status'=>'success',
-//                'message' =>'Success you can change your password'
-//            ]);
-//        }
-//        else{
-//            return response([
-//                'status'=>'failed',
-//                'message' =>'Enter correct details '
-//            ]);
-//        }
-//    }
-//    public function finish_reset($email_value,$otp_value){
-//        $data = request()->all();
-//        $email=$email_value;
-//        $otp=$otp_value;
-//        $password=$data['password'];
-//        $user = User::where('email',$email)->where('otp',$otp)->first();
-//        if ($user){
-//            $user->password = Hash::make($password);
-//            $user->update();
-//            return response([
-//                'status'=>'success',
-//                'message' =>'Password changed successfully'
-//            ]);
-//        }
-//        else{
-//            return response([
-//                'status'=>'failed',
-//                'message' =>'Ensure correct details are entered'
-//            ]);
-//        }
-//
-//
-//
-//    }
+                    sendNotification("+254" . $user->phone, $body);
+                    $user->update();
+                    return response([
+                        'status' => 'success',
+                        'message' => 'Check your email for password reset request'
+                    ]);
+
+
+
+            }
+        }
+        return response([
+            'status'=>'User not found',
+            'message' => 'User with the credentials not found'
+        ]);
+    }
+    public function confirmOtp(){
+        $rules = [
+            'email' => 'required',
+            'otp' => 'required',
+        ];
+        $data = request()->all();
+        $valid = Validator::make($data, $rules);
+        if (count($valid->errors())){
+            return response([
+                'status' => 'failed',
+                'error' => $valid->errors(),
+                'message' => $valid->errors()
+            ]);
+        }
+        $email=$data['email'];
+        $otp=$data['otp'];
+
+        $user = User::where('email',$email)->where('otp',$otp)->first();
+
+        if ($user){
+            return response([
+                'status'=>'success',
+                'message' =>'Success you can change your password'
+            ]);
+        }
+        else{
+            return response([
+                'status'=>'failed',
+                'message' =>'Enter correct details '
+            ]);
+        }
+    }
+    public function finish_reset(Request $request,$email_value,$otp_value){
+        $data = request()->all();
+        $email=$email_value;
+        $otp=$otp_value;
+        $password=$data['password'];
+        $user = User::where('email',$email)->where('otp',$otp)->first();
+        if ($user){
+            $user->password = Hash::make($password);
+            $user->update();
+            return response([
+                'status'=>'success',
+                'message' =>'Password changed successfully'
+            ]);
+        }
+        else{
+            return response([
+                'status'=>'failed',
+                'message' =>'Ensure correct details are entered'
+            ]);
+        }
+
+
+
+    }
 }
