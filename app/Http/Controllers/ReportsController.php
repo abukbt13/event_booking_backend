@@ -14,7 +14,7 @@ class ReportsController extends Controller
 
         return response()->json([
             'users' => User::count(),
-            'active_bookings' => Booking::where('status', 'active')->count(),
+            'active_bookings' => Booking::where('payment_status', 1)->count(),
             'reviews' => Review::count(),
         ]);
     }
@@ -24,6 +24,17 @@ class ReportsController extends Controller
         return response()->json([
             'users' => User::latest()->get()
         ]);
+    }
+
+    public function UpdateReviews($id)
+    {
+
+        $review = Review::findOrFail($id);
+        $review->status = !$review->status;
+        $review->save();
+
+        return response()->json(['message' => 'Status updated']);
+
     }
 
 }

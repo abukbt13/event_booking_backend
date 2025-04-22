@@ -56,4 +56,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     route::get('reports', [ReportsController::class, 'Reports']);
     route::get('admin/users', [ReportsController::class, 'usersReports']);
+
+    route::get('update/reviews/{id}', [ReportsController::class, 'UpdateReviews']);
+
+
+
 });
