@@ -31,17 +31,17 @@ class EventController extends Controller
         }
 
         // Check if event already exists
-        $existingEvent = Event::where('title', $data['title'])
-            ->where('event_date', $data['event_date'])
-            ->where('user_id', Auth::id()) // Ensure it's checked per user
-            ->first();
-//
-        if ($existingEvent) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'This event already exists!'
-            ]);
-        }
+//        $existingEvent = Event::where('title', $data['title'])
+//            ->where('event_date', $data['event_date'])
+//            ->where('user_id', Auth::id()) // Ensure it's checked per user
+//            ->first();
+////
+//        if ($existingEvent) {
+//            return response()->json([
+//                'status' => 'failed',
+//                'message' => 'This event already exists!'
+//            ]);
+//        }
 
         // Save the new event
         $event = new Event();

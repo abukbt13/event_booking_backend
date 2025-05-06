@@ -82,7 +82,6 @@ class BookingController extends Controller
     {
         $booking = Booking::where('bookings.user_id', Auth::id())
             ->where('bookings.event_id', $event_id)
-            ->where('bookings.status', 'pending')
             ->join('venues', 'bookings.venue_id', '=', 'venues.id')
             ->select('bookings.*', 'venues.venue','venues.picture')
             ->first();
@@ -122,6 +121,7 @@ class BookingController extends Controller
             'booking' => $booking
         ]);
     }
+
     public function CompleteCheckout(Request $request,$id)
     {
 //        dd($request->all());
