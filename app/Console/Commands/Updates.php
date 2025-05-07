@@ -26,7 +26,7 @@ class Updates extends Command
      */
     public function handle()
     {
-        \Log::info('Checking bookings status at ' . now());
+        \Log::info('This command Checking bookings status at ' . now());
 
         // Get all bookings
         $bookings = Booking::where('status','!=','completed')->get();
