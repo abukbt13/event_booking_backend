@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 
 // ✅ schedule the event status update every 5 minutes
 app(Schedule::class)->command('app:updates')->everyMinute();
+app(Schedule::class)->command('app:notify')->everyMinute();
